@@ -1,22 +1,16 @@
 
-name: Telegram channel access test
+name: Telegram schedule test
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "*/10 * * * *"
 
 jobs:
-  test-channel:
+  schedule-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Check bot and channel access
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      - name: Confirm scheduled run
         run: |
-          set -e
-
-          RESPONSE=$(curl --silent --show-error --fail \
-            --get \
-            --data-urlencode "chat_id=@khabaronlineirn" \
-            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChat")
-
-          echo "$RESPONSE"
+          echo "GitHub scheduled workflow ran successfully."
+          date -u
