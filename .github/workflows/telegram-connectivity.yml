@@ -1,21 +1,22 @@
 
-name: Telegram connection test
+name: Telegram channel access test
 
 on:
   workflow_dispatch:
 
 jobs:
-  test-telegram:
+  test-channel:
     runs-on: ubuntu-latest
     steps:
-      - name: Test Telegram Bot API
+      - name: Check bot and channel access
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         run: |
-          if [ -z "$TELEGRAM_BOT_TOKEN" ]; then
-            echo "ERROR: Bot token secret is missing."
-            exit 1
-          fi
+          set -e
 
-          curl --silent --show-error --max-time 20 \
-            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe"
+          RESPONSE=$(curl --silent --show-error --fail \
+            --get \
+            --data-urlencode "chat_id=@khabaronlineirn" \
+            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getChat")
+
+          echo "$RESPONSE"
